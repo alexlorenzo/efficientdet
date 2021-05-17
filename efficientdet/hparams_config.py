@@ -172,7 +172,7 @@ def default_detection_configs():
   h = Config()
 
   # model name.
-  h.name = 'efficientdet-d1'
+  h.name = 'efficientdet-d0'
 
   # activation type: see activation_fn in utils.py.
   h.act_type = 'swish'
@@ -190,12 +190,12 @@ def default_detection_configs():
 
   # dataset specific parameters
   # TODO(tanmingxing): update this to be 91 for COCO, and 21 for pascal.
-  h.num_classes = 90  # 1+ actual classes, 0 is reserved for background.
+  h.num_classes = 2  # 1+ actual classes, 0 is reserved for background.
   h.seg_num_classes = 3  # segmentation classes
   h.heads = ['object_detection']  # 'object_detection', 'segmentation'
 
   h.skip_crowd_during_training = True
-  h.label_map = None  # a dict or a string of 'coco', 'voc', 'waymo'.
+  h.label_map = {1: 'intersection'}  # a dict or a string of 'coco', 'voc', 'waymo'.
   h.max_instances_per_image = 100  # Default to 100 for COCO.
   h.regenerate_source_id = False
 
@@ -276,14 +276,14 @@ def default_detection_configs():
   h.img_summary_steps = None
 
   h.lr_decay_method = 'cosine'
-  h.moving_average_decay = 0.9998
+  h.moving_average_decay = 0.
   h.ckpt_var_scope = None  # ckpt variable scope.
   # If true, skip loading pretrained weights if shape mismatches.
   h.skip_mismatch = True
 
   h.backbone_name = 'efficientnet-b1'
   h.backbone_config = None
-  h.var_freeze_expr = None
+  h.var_freeze_expr = '(efficientnet|fpn_cells|resample_p6)'
 
   # A temporary flag to switch between legacy and keras models.
   h.use_keras_model = True

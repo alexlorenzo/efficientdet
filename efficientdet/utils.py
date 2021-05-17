@@ -132,6 +132,7 @@ def get_ckpt_var_map(ckpt_path, ckpt_scope, var_scope, skip_mismatch=None):
         var_op_name.endswith('/ExponentialMovingAverage')):
       ckpt_var = ckpt_scope + var_op_name[:-len('/ExponentialMovingAverage')]
 
+   
     if ckpt_var not in ckpt_var_names:
       if 'Momentum' in ckpt_var or 'RMSProp' in ckpt_var:
         # Skip optimizer variables.

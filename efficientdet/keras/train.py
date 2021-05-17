@@ -110,7 +110,10 @@ def define_flags():
 
 def setup_model(model, config):
   """Build and compile model."""
-  model.build((None, *config.image_size, 3))
+  # model.build((None, *config.image_size, 3))
+  effConfig = hparams_config.get_efficientdet_config(config.model_specific_logic.model_version)
+
+  model.build((None, effConfig.image_size, effConfig.image_size, 3))
   model.compile(
       steps_per_execution=config.steps_per_execution,
       optimizer=train_lib.get_optimizer(config.as_dict()),
@@ -267,7 +270,9 @@ def main(_):
 
         val_dataset = get_dataset(False, config)
         logging.info('start loading model.')
-        model.load_weights(tf.train.latest_checkpoint(FLAGS.model_dir))
+        ckpt_path = tf.train.latest_checkpoint(config.weights)
+        # model.load_weights(tf.train.latest_checkpoint(FLAGS.model_dir))
+        model.load_weights(ckpt_path)
         logging.info('finish loading model.')
         coco_eval = train_lib.COCOCallback(val_dataset, 1)
         coco_eval.set_model(model)
