@@ -435,3 +435,6 @@ python dataset/inspect_tfrecords.py --file_pattern dataset/sample.record\
 * eval: flag for eval data.
 
 NOTE: this is not an official Google product.
+
+
+python main.py --mode=train --train_file_pattern=tfrecord/train*.tfrecord --val_file_pattern=tfrecord/val*.tfrecord --model_name=efficientdet-d0 --model_dir=/tmp/efficientdet-d0-finetune  --train_batch_size=1 --num_epochs=50 --hparams="num_classes=2,moving_average_decay=0,mixed_precision=true"

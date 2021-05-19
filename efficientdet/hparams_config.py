@@ -214,11 +214,11 @@ def default_detection_configs():
   h.learning_rate = 0.08  # 0.008 for adam.
   h.lr_warmup_init = 0.008  # 0.0008 for adam.
   h.lr_warmup_epoch = 1.0
-  h.first_lr_drop_epoch = 200.0
-  h.second_lr_drop_epoch = 250.0
+  h.first_lr_drop_epoch = 50.0
+  h.second_lr_drop_epoch = 100.0
   h.poly_lr_power = 0.9
   h.clip_gradients_norm = 10.0
-  h.num_epochs = 300
+  h.num_epochs = 150
   h.data_format = 'channels_last'
   # The default image normalization is identical to Cloud TPU ResNet.
   h.mean_rgb = [0.485 * 255, 0.456 * 255, 0.406 * 255]
