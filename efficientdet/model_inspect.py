@@ -16,6 +16,7 @@ r"""Tool to inspect a model."""
 import os
 import time
 from typing import Text, Tuple, List
+import json
 
 from absl import app
 from absl import flags
@@ -181,13 +182,20 @@ class ModelInspector(object):
         raw_images += [np.zeros_like(raw_images[0])] * padding_size
 
       detections_bs = driver.serve_images(raw_images)
+      
       for j in range(size_before_pad):
         img = driver.visualize(raw_images[j], detections_bs[j], **kwargs)
         img_id = str(i * batch_size + j)
         output_image_path = os.path.join(output_dir, img_id + '.jpg')
         Image.fromarray(img).save(output_image_path)
-        print('writing file to %s' % output_image_path)
 
+        coordinates = dict()
+        coordinates[img_id] = detections_bs[j].tolist()
+        output_json_path = os.path.join(output_dir, img_id + '.json')
+        with open(output_json_path, w) as fp :
+          json.dump(fp)
+
+        print('writing file  and json to %s' % output_image_path)
   def saved_model_benchmark(self,
                             image_path_pattern,
                             trace_filename=None,
