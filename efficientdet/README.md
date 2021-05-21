@@ -438,3 +438,21 @@ NOTE: this is not an official Google product.
 
 
 python main.py --mode=train --train_file_pattern=tfrecord/train*.tfrecord --val_file_pattern=tfrecord/val*.tfrecord --model_name=efficientdet-d0 --model_dir=/tmp/efficientdet-d0-finetune  --train_batch_size=1 --num_epochs=50 --hparams="num_classes=2,moving_average_decay=0,mixed_precision=true"
+
+## 13. Innerve commands
+```conda activate efficientdet_google```
+
+#### Create tf records
+
+```python dataset/create_coco_tfrecord.py --logtostderr       --image_dir=/home/ubuntu/innerve_data/3D/intersection/20210520_intersections/images/valid       --object_annotations_file=/home/ubuntu/innerve_data/3D/intersection/20210520_intersections/annotations/valid.json   --output_file_prefix=tfrecord/valid       --num_shards=20```
+
+```python dataset/create_coco_tfrecord.py --logtostderr       --image_dir=/home/ubuntu/innerve_data/3D/intersection/20210520_intersections/images/train       --object_annotations_file=/home/ubuntu/innerve_data/3D/intersection/20210520_intersections/annotations/train.json   --output_file_prefix=tfrecord/train       --num_shards=20```
+
+#### Train model
+
+```python main.py --mode=train --train_file_pattern=tfrecord/train*.tfrecord --val_file_pattern=tfrecord/val*.tfrecord --model_name=efficientdet-d0 --model_dir=/tmp/efficientdet-d0-finetune2 --ckpt=efficientdet-d0 --train_batch_size=16 --num_epochs=50 --hparams="num_classes=2,moving_average_decay=0.01,mixed_precision=true,clip_gradients_norm=3.0,jitter_min=0.8,jitter_max=1.2,learning_rate=0.0001"```
+
+#### Save model
+```python3 model_inspect.py --runmode=saved_model --ckpt_path=/tmp/efficientdet-d0-finetune2/ --model_name=efficientdet-d0 --saved_model_dir=eff_d0_exp_data_saved_model2```
+
+```python model_inspect.py --runmode=saved_model_infer --saved_model_dir=eff_d0_exp_data_saved_model2 --model_name='efficientdet-d0'  --input_image=/home/ubuntu/innerve_data/3D/intersection/20210520_intersections/images/test/*.png --output_image_dir='serve_image_out_3' --min_score_thresh=0.35  --max_boxes_to_draw=20```
